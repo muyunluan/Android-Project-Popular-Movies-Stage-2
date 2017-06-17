@@ -23,4 +23,3 @@ Note:
 
 Please update your own Movie Database API KEY (https://www.themoviedb.org) in line 41 of MainActivityFragment.java before compiling the project.
 
-# Android-Project-Popular-Movies-Stage-2

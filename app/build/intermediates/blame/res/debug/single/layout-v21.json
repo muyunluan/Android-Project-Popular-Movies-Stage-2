@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/Users/FDeng/.android/build-cache/b62cbbc3ec502cf30a1f4fa8e88ab27cb2662533/output/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/FDeng/.android/build-cache/b62cbbc3ec502cf30a1f4fa8e88ab27cb2662533/output/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/FDeng/.android/build-cache/b62cbbc3ec502cf30a1f4fa8e88ab27cb2662533/output/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/FDeng/.android/build-cache/b62cbbc3ec502cf30a1f4fa8e88ab27cb2662533/output/res/layout-v21/notification_template_custom_big.xml"
+    }
+]

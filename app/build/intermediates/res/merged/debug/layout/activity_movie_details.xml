@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.muyunluan.popularmovies.MovieDetailsActivity">
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/detailTitle"/>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/inner_scroll_layout"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_poster"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/image_margin"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_release_date"
+                        style="@style/ratingTitle"/>
+
+                    <TextView
+                        android:id="@+id/tv_rating"
+                        style="@style/releaseDateTitle"/>
+
+                    <TextView
+                        android:id="@+id/tv_favorite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/favorite"/>
+
+                    <ImageButton
+                        android:id="@+id/imgbt_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_star"
+                        android:layout_gravity="center"
+                        android:background="@null"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/linear_trailers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_trailers"
+                        android:text="@string/trailer_title"
+                        style="@style/trailerTitle"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_trailers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_reviews"
+                        android:text="@string/reviews_title"
+                        style="@style/reviewTitle"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_reviews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+</LinearLayout>

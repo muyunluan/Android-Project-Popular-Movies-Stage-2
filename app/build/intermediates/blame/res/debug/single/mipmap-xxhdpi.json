@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_play.png",
+        "source": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/src/main/res/mipmap-xxhdpi/ic_play.png"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_unstar.png",
+        "source": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/src/main/res/mipmap-xxhdpi/ic_unstar.png"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_star.png",
+        "source": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/src/main/res/mipmap-xxhdpi/ic_star.png"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher.png",
+        "source": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher_round.png",
+        "source": "/Users/FDeng/Desktop/Ayla/GoogleAndroidTraining/Projects/PopularMovies/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+    }
+]
