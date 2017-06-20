@@ -17,7 +17,7 @@ public final class OpenMovieJsonUtils {
 
     private static final String TAG = OpenMovieJsonUtils.class.getSimpleName();
 
-    public static ArrayList<MovieFlavor> getMovieStringsFromJson(Context context, String moiveJsonStr) throws JSONException {
+    public static ArrayList<MovieFlavor> getMovieStringsFromJson(Context context, String moiveJsonStr, ArrayList<MovieFlavor> parsedMovieData) throws JSONException {
         final String KEY_RESULTS = "results";
 
         final String KEY_ID = "id";
@@ -31,7 +31,8 @@ public final class OpenMovieJsonUtils {
 
         JSONArray resultsArray = movieJson.getJSONArray(KEY_RESULTS);
         int arrLen = resultsArray.length();
-        ArrayList<MovieFlavor> parsedMovieData = new ArrayList<>();
+        //ArrayList<MovieFlavor> parsedMovieData = new ArrayList<>();
+        parsedMovieData.clear();
 
         for (int i = 0; i < arrLen; i++) {
             JSONObject movieObject = resultsArray.getJSONObject(i);

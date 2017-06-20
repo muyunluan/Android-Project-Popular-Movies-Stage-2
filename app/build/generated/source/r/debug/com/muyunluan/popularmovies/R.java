@@ -2372,7 +2372,7 @@ containing a value of this type.
         public static final int expand_activities_button=0x7f0b0031;
         public static final int expanded_menu=0x7f0b0046;
         public static final int flavor_image=0x7f0b006e;
-        public static final int fragment_container=0x7f0b005f;
+        public static final int fragment_main=0x7f0b005f;
         public static final int home=0x7f0b0004;
         public static final int homeAsUp=0x7f0b0017;
         public static final int icon=0x7f0b0035;

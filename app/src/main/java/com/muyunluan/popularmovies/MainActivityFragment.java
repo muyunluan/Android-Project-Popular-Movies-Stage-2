@@ -1,12 +1,9 @@
 package com.muyunluan.popularmovies;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,13 +14,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.muyunluan.popularmovies.data.FavoriteContract;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+
+import static com.muyunluan.popularmovies.Constants.KEY_MOVIE_OBJECT;
+import static com.muyunluan.popularmovies.Constants.KEY_SAVED_MOVIES;
+import static com.muyunluan.popularmovies.Constants.SORT_ORDER_FAVORITES;
+import static com.muyunluan.popularmovies.Constants.SORT_ORDER_MOST_POPULAR;
+import static com.muyunluan.popularmovies.Constants.SORT_ORDER_TOP_RATE;
+import static com.muyunluan.popularmovies.Constants.YOUR_API_KEY;
 
 /**
  * Created by Fei Deng on 5/12/17.
@@ -35,16 +33,7 @@ public class MainActivityFragment extends Fragment {
     private static final String TAG = MainActivityFragment.class.getSimpleName();
     private GridView mGridView;
     private MovieFlavorAdapter movieFlavorAdapter;
-    private ArrayList<MovieFlavor> retrievedMovieData;
-
-    //TODO: Please update your own API Key
-    public static final String YOUR_API_KEY = "";
-    private static final String KEY_SAVED_MOVIES = "saved_movies";
-    private static final String KEY_MOVIE_OBJECT = "movie_object";
-
-    private static final String SORT_ORDER_TOP_RATE = "top_rates";
-    private static final String SORT_ORDER_MOST_POPULAR = "most_popular";
-    private static final String SORT_ORDER_FAVORITES = "favorites";
+    private ArrayList<MovieFlavor> retrievedMovieData = new ArrayList<>();
 
     public MainActivityFragment() {
     }
@@ -52,15 +41,27 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
+
+        if (null != savedInstanceState) {
+            if (null != savedInstanceState.<MovieFlavor>getParcelableArrayList(KEY_SAVED_MOVIES)) {
+                retrievedMovieData.clear();
+                retrievedMovieData.addAll(savedInstanceState.<MovieFlavor>getParcelableArrayList(KEY_SAVED_MOVIES));
+            } else {
+                Log.d(TAG, "onCreateView: no saved movies list");
+            }
+
+        } else {
+            Log.d(TAG, "onCreate: no savedInstanceState");
+        }
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
+        movieFlavorAdapter = new MovieFlavorAdapter(getActivity(), new ArrayList<MovieFlavor>());
+
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-
 
         mGridView = (GridView) view.findViewById(R.id.discovery_grid);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,6 +72,7 @@ public class MainActivityFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        mGridView.setAdapter(movieFlavorAdapter);
 
         return view;
     }
@@ -78,110 +80,34 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        getMovies();
+        if (retrievedMovieData.size() == 0) {
+            fetchMovies(SORT_ORDER_MOST_POPULAR);
+        } else {
+            updateMovies();
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_SAVED_MOVIES, retrievedMovieData);
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_SAVED_MOVIES, retrievedMovieData);
     }
 
-    private void getMovies() {
-        if (null != movieFlavorAdapter) {
-            movieFlavorAdapter.clear();
-            movieFlavorAdapter = null;
+    private void fetchMovies(String sortOrder) {
+        if (TextUtils.isEmpty(YOUR_API_KEY)) {
+            Log.e(TAG, "fetchMovies: empty API KEY");
+            return;
         }
-        new MovieQueryTask(SORT_ORDER_MOST_POPULAR).execute(YOUR_API_KEY);
+
+        MovieQueryTask movieQueryTasks = new MovieQueryTask(getActivity(), retrievedMovieData, movieFlavorAdapter, sortOrder);
+        movieQueryTasks.execute(YOUR_API_KEY);
     }
 
     private void updateMovies() {
         movieFlavorAdapter.clear();
         for(MovieFlavor movieFlavor : retrievedMovieData) {
+            //Log.i(TAG, "updateMovies: movie data - " + movieFlavor.toString());
             movieFlavorAdapter.add(movieFlavor);
-        }
-    }
-
-    public class MovieQueryTask extends AsyncTask<String, Void, ArrayList<MovieFlavor>> {
-
-        private String mSortOrder;
-
-        public MovieQueryTask(String sortOrder) {
-            mSortOrder = sortOrder;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<MovieFlavor> doInBackground(String... params) {
-
-            if (mSortOrder.equals(SORT_ORDER_FAVORITES)) {
-                getFavorites();
-                return retrievedMovieData;
-            }
-
-            if (0 == params.length) {
-                return null;
-            }
-
-            String movieUrlStr = params[0];
-            boolean isRating = mSortOrder.equals(SORT_ORDER_TOP_RATE);
-            URL url = NetworkUtils.buildBaseUrl(movieUrlStr, isRating);
-            //Log.i(TAG, "doInBackground: get URL - " + url.toString());
-            try {
-                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(url);
-                 retrievedMovieData = OpenMovieJsonUtils.getMovieStringsFromJson(getActivity(),jsonMovieResponse);
-                return retrievedMovieData;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        private void getFavorites() {
-            Uri uri = FavoriteContract.FavoriteEntry.CONTENT_URI;
-            ContentResolver contentResolver = getContext().getContentResolver();
-            Cursor cursor = null;
-
-            try {
-                cursor = contentResolver.query(uri, null, null, null, null);
-                retrievedMovieData.clear();
-
-                if (null != cursor) {
-                    while (cursor.moveToNext()) {
-                        MovieFlavor movieFlavor = new MovieFlavor(
-                                cursor.getInt(1),
-                                cursor.getString(2),
-                                cursor.getString(3),
-                                cursor.getString(4),
-                                cursor.getDouble(5),
-                                cursor.getString(6));
-                        retrievedMovieData.add(movieFlavor);
-                    }
-                } else {
-                    Log.e(TAG, "getFavorites: empty Cursor");
-                }
-            } finally {
-                if (null != cursor) {
-                    cursor.close();
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MovieFlavor> movieFlavors) {
-            if (!movieFlavors.isEmpty()) {
-                //Log.i(TAG, "onPostExecute: get MovieFlavors length - " + movieFlavors.size());
-                movieFlavorAdapter = new MovieFlavorAdapter(getActivity(), movieFlavors);
-                mGridView.setAdapter(movieFlavorAdapter);
-                movieFlavorAdapter.notifyDataSetChanged();
-            }
         }
     }
 
@@ -197,13 +123,13 @@ public class MainActivityFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_sort_most_popular:
-                new MovieQueryTask(SORT_ORDER_MOST_POPULAR).execute(YOUR_API_KEY);
+                fetchMovies(SORT_ORDER_MOST_POPULAR);
                 return true;
             case R.id.menu_sort_top_rated:
-                new MovieQueryTask(SORT_ORDER_TOP_RATE).execute(YOUR_API_KEY);
+                fetchMovies(SORT_ORDER_TOP_RATE);
                 return true;
             case R.id.menu_sort_favorites:
-                new MovieQueryTask(SORT_ORDER_FAVORITES).execute(YOUR_API_KEY);
+                fetchMovies(SORT_ORDER_FAVORITES);
                 return true;
         }
         return super.onOptionsItemSelected(item);

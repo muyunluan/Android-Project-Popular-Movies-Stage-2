@@ -25,6 +25,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.muyunluan.popularmovies.Constants.KEY_MOVIE_OBJECT;
+import static com.muyunluan.popularmovies.Constants.YOUR_API_KEY;
+
 public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
@@ -46,8 +49,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        if (null != getIntent() && getIntent().hasExtra("movie_object")) {
-            mMovieFlavor = getIntent().getParcelableExtra("movie_object");
+        if (null != getIntent() && getIntent().hasExtra(KEY_MOVIE_OBJECT)) {
+            mMovieFlavor = getIntent().getParcelableExtra(KEY_MOVIE_OBJECT);
         }
 
         movieId = mMovieFlavor.getmId();
@@ -100,7 +103,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
     }
 
     private boolean isFavorite() {
-        Uri uri = ContentUris.withAppendedId(FavoriteContract.FavoriteEntry.CONTENT_URI, (long)mMovieFlavor.getmId());
+        Uri contentUri = FavoriteContract.FavoriteEntry.CONTENT_URI;
+        long id = (long)mMovieFlavor.getmId();
+        Uri uri = ContentUris.withAppendedId(contentUri, id);
         Cursor cursor = null;
 
         try {
@@ -157,7 +162,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
         @Override
         protected MovieFlavor doInBackground(Void... params) {
-            URL url = NetworkUtils.buildReviewsUrl(MainActivityFragment.YOUR_API_KEY, movieId);
+            URL url = NetworkUtils.buildReviewsUrl(YOUR_API_KEY, movieId);
             //Log.i(TAG, "doInBackground: get URL - " + url.toString());
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(url);
@@ -188,7 +193,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
         @Override
         protected MovieFlavor doInBackground(Void... params) {
-            URL url = NetworkUtils.buildTrailerUrl(MainActivityFragment.YOUR_API_KEY, movieId);
+            URL url = NetworkUtils.buildTrailerUrl(YOUR_API_KEY, movieId);
             //Log.i(TAG, "doInBackground: get URL - " + url.toString());
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(url);
